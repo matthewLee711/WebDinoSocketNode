@@ -28,7 +28,7 @@ io.on('connection', function(socket){
     //run job
     master.runJob(input);
 
-    //check and display array
+    //check and display results from array
 
     //output the result
     //io.emit('parameters', input);

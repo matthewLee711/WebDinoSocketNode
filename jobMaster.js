@@ -11,8 +11,7 @@ var jobMaster = new HashMap();
 var JobMaster = function() {};
 
 JobMaster.prototype.addJob = function(name) {
-	console.log("yay");
-	console.log(name);
+	console.log("Job master add: " + name);
   	//Instantiate a new job object and pass url
   	var job = new Job(name);
   	//Store new job in hashmap
@@ -25,6 +24,8 @@ JobMaster.prototype.runJob = function(name) {
 
   	if(job != null) {
   		console.log("job running");
+  		job.runJob();
+  		//job.getParsedXML();
   		//return job.run();
   	}
 };
