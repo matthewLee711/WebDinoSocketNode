@@ -16,44 +16,46 @@ var Job = function(url) {
 };
 
 Job.prototype.runJob = function() {
+	//Need to reference to scope and context outside of inner function
+	var _this = this;
 	//Retrieve webtest page itself
 	request({
 	  uri: this.url,
 	}, function(error, response, body) {
 	  var $ = cheerio.load(body);
 	  $("xmlUrl").each(function() {
-	    this.xml = $(this).text();
-	    console.log("Retrieve xml: " + this.xml);
-	    getParseXML.call();
+	    _this.xml = $(this).text();
+	    console.log("Retrieve xml: " + _this.xml);
+	    _this.getParseXML();
 	  });
 	});
 	//if url is invalid, cancel job
 };
 
 Job.prototype.getParseXML = function() {
-	console.log("parse");
+	console.log("Enter parseXML function");
+	//Need to reference to scope and context outside of inner function
+	var _this = this;
 	//Check continually until web test is done
-	//while loop to continually check -- xml
-	while(this.statusCode != 200){
-		request({
-		  uri: this.xml,
-		}, function(error, response, body) {
-		  var $ = cheerio.load(body);
-		  $("statusCode").each(function() {
-		    this.statusCode = $(this).text();
-		    console.log("statusCode: " + this.statusCode);
-		  });
-		  $("TTFB").each(function() {
-		    this.firstByte = $(this).text();
-		    console.log("ttfb: " + this.firstByte);
-		  });
-		});
-		//pause for 5 seconds
-		setTimeout(function() {
-		    console.log('timeout');
-		}, 5000);
-	}
-
+	//Recursion to continually check xml and extract content
+	//if(_this.statusCode != 200) {
+	request({
+	  uri: _this.xml,
+	}, function(error, response, body) {
+	  var $ = cheerio.load(body);
+	  console.log("entered xml parser");
+	  $("statusCode").each(function() {
+	    _this.statusCode = $(this).text();
+	    console.log("statusCode: " + _this.statusCode);
+	  });
+	  //Retrieve ttfb and loadtime
+	  if(_this.statusCode == 200){
+	  	$("TTFB").each(function() {
+	  	  _this.firstByte = $(this).text();
+	  	  console.log("ttfb: " + _this.firstByte);
+	  	});
+	  }
+	});
 	//while loop to continually check -- json
 
 };

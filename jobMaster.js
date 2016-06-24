@@ -34,6 +34,5 @@ JobMaster.prototype.removeJob = function(name) {
 	jobMaster.remove(name);
 };
 
-//exports.JobMaster = JobMaster();
 module.exports = JobMaster;
 
